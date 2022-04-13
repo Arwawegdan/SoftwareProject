@@ -1,0 +1,67 @@
+﻿@page "/TodayTasks"
+@using System.Net.Http.Json;
+
+<PageTitle>TodayTasks</PageTitle>
+
+<h3>TodayTasks</h3>
+
+<EditForm Model=@task>
+    <FluentValidationValidator />
+    <ValidationSummary />
+    <div class="form-group">
+        <label for="Name">Name</label>
+        <InputText @bind-Value=task.Name class="form-control" id="Name" />
+        <ValidationMessage For="@(()=>task.Name)" ) />
+    </div>
+
+    <div class="form-group">
+        <label for="Description">Description</label>
+        <InputText @bind-Value=task.Description class="form-control" id="Description" />
+        <ValidationMessage For="@(()=>task.Description)" ) />
+    </div>
+
+    <div class="form-group">
+        <label for="StartDate">StartDate</label>
+        <InputDate @bind-Value=task.StartDate class="form-control" id="StartDate" />
+        <ValidationMessage For="@(()=>task.StartDate)" ) />
+    </div>
+
+    <div class="form-group">
+        <label for="EndDate">EndDate</label>
+        <InputDate @bind-Value=task.EndDate class="form-control" id="EndDate" />
+        <ValidationMessage For="@(()=>task.EndDate)" ) />
+    </div>
+
+  
+    <button class="btn btn-primary" @onclick="@( async ()=> await SaveTask())">Save</button>
+    <button class="btn btn-danger" @onclick="@( ()=> task = new() )">Cancel</button>
+</EditForm>
+
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Mobile</th>
+            <th>Age</th>
+            <th>Telephone</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (ToDoTask taskFromDB in tasks ?? new())
+        {
+            <tr>
+                <td>@taskFromDB.Name</td>
+                <td>@taskFromDB.Description</td>
+                <td>@taskFromDB.StartDate</td>
+                <td>@taskFromDB.EndDate</td>
+
+
+
+                <td><button class="btn btn-primary" @onclick="@( ()=> task = taskFromDB )" style="width:110px;">Edit</button></td>
+                <td><button class="btn btn-danger" @onclick="@( async ()=> await DeleteTask(taskFromDB.Id) )" style="width:110px;">Delete</button></td>
+            </tr>
+        }
+    </tbody>
+</table>
